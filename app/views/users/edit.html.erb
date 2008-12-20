@@ -1,0 +1,17 @@
+<h1>Edit User - <%= @user.username %></h1>
+
+<% if @current_user.is_admin? && @user != @current_user %>
+	<%= form_tag(user_path(@user), :method => :delete)%>
+		<div>
+			<%= content_tag(:button, 'Delete user', :type => 'submit')%>
+		</div>
+	</form>
+<% end %>
+
+<%= error_messages_for 'user' %>
+<% form_for :user, @user, :url => users_path do |f| %>
+	<div>
+		<%= render :partial => 'users/form', :object => f %>
+		<%= f.submit "Add User" %>
+	</div>
+<% end %>

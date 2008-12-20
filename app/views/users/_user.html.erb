@@ -1,0 +1,8 @@
+<tr>
+	<td><%= link_to user.username, edit_user_path(user) %></td>
+	<td><%= user.first_name %></td>
+	<td><%= user.last_name %></td>
+	<td><%= mail_to user.email %></td>
+	<td><%= user.phone_number %></td>
+	<td><%= user.has_picked? ? 'X' : '' %></td>
+</tr>

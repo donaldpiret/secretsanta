@@ -1,0 +1,34 @@
+<% if @current_user.is_admin? %>
+	<div class="admin">
+		<h2>Admin section</h2>
+		<table>
+			<thead>
+				<tr>
+					<td>Username</td>
+					<td>First Name</td>
+					<td>Last Name</td>
+					<td>Email</td>
+					<td>Phone</td>
+					<td>Has picked?<td>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td><%= link_to "Add a new user", new_user_path %></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<%= render :partial => 'users/user', :collection => @users %>
+			</tbody>
+		</table>
+	</div>
+<% end %>
+
+<h2>Party information &amp; Rules</h2>
+<%= textilize CONFIG["info"] %>
+
+<h2>Profile Information</h2>
+<% if !@current_user.profile_complete? %>
+	<%= link_to(edit_user_path(@current_user), "Complete it now!")%>
+<% end %>
+

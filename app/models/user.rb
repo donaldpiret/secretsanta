@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   
-  validates_presence_of :username, :first_name, :last_name
+  validates_presence_of :username
   validates_presence_of :password, :if => :password_required?
   validates_uniqueness_of :username, :case_sensitive => false
   validates_confirmation_of :password, :unless => Proc.new{|user|user.password.blank?}
@@ -72,6 +72,10 @@ class User < ActiveRecord::Base
       when 'sha256' then return Digest::SHA256.hexdigest(pw.downcase + self.salt) == self.password_hash
       else raise _("Invalid Password Format")
     end
+  end
+  
+  def profile_complete?
+    self.email && self.phone_number
   end
   
   protected
