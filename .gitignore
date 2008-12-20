@@ -4,3 +4,6 @@ tmp/**/*
 doc/api
 doc/app
 db/*.db
+config/config.yml
+config/mailer.yml
+config/deploy.rb
