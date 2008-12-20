@@ -1,0 +1,16 @@
+<% if flash[:error] or flash[:warning] or flash[:notice] or flash[:info] %>
+	<div id="notices">
+		<% if flash[:error] %>
+			<p class="error"><%= flash[:error] %></p>
+		<% end %>
+		<% if flash[:warning] %>
+			<p class="warning"><%= flash[:warning] %></p>
+		<% end %>
+		<% if flash[:notice] %>
+			<p class="notice"><%= flash[:notice] %></p>
+		<% end %>
+		<% if flash[:info] %>
+			<p class="info"><%= flash[:info]%></p>
+		<% end %>
+	</div>
+<% end %>

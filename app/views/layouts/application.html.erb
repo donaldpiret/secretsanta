@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>Christmas Gift Exchange Name Picker</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<%= stylesheet_link_tag 'reset', 'style', :media => 'screen' %>
+		<%= yield :head %>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="header">
+				<h1>Christmas Gift Exchange Name Picker</h1>
+				<%= yield :menu %>
+				<% if @current_user %>
+					<%= form_tag(session_path, :method => :delete, :class => 'button-to', :id => 'signoutButton')%>
+						<div>
+							<%= content_tag(:button, 'Logout', :type => 'submit', :id => 'logoutButton')%>
+						</div>
+					</form>
+				<% end %>
+			</div>
+			<div id="content">
+				
+				<%= notices %>
+				<%= yield %>
+			</div>
+			<div id="footer">
+			</div>
+		</div>
+	</body>
+</html>

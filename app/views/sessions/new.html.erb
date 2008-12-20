@@ -1,0 +1,10 @@
+<div id="loginBox">
+	<% form_for :session, @session, :url => session_path, :html => {:class => 'autoFocus'} do |f| %>
+		<% field_set_tag "Login" do %>
+			<div>
+				<%= render :partial => 'sessions/form', :object => f %>
+					<%= submit_tag "Login", :class => 'submitButton' %>
+			</div>
+		<% end %>
+	<% end %>
+</div>
