@@ -3,5 +3,5 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'sessions', :action => 'new'
   
   map.resource :dashboard, :session
-  map.resources :users, :member => {:pick => [:get, :post]}
+  map.resources :users, :collection => {:pick => :post}
 end

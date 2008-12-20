@@ -4,3 +4,8 @@ task :setup => :environment do
   administrator.is_admin = true
   administrator.save!
 end
+
+desc "Reset the application"
+task :reset => :environment do
+  User.clear_picks!
+end

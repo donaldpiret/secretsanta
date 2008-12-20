@@ -1,3 +1,49 @@
+<div id="partyInfo">
+	<h2>Party information &amp; Rules</h2>
+	<%= textilize CONFIG["info"] %>
+</div>
+
+<div id="pickInfo">
+	<h2>Pick</h2>
+	<% if @current_user.has_picked? %>
+		<% if flash[:pick_name] %>
+			<span class="pick"><%= flash[:pick_name] %></span>
+		<% else %>
+			<p>You have already picked!</p>
+		<% end %>
+	<% else %>
+		<% if @current_user.profile_complete? %>
+			<%= form_tag(pick_users_path, :method => :post)%>
+				<div>
+					<%= content_tag(:button, 'Pick Now!', :type => 'submit', :id => 'pickButton')%>
+				</div>
+			</form>
+		<% else %>
+		
+		<% end %>
+	<% end %>
+</div>
+
+<div id="profileInfo">
+	<h2>Profile Information</h2>
+	<% if !@current_user.profile_complete? %>
+		<p class="warning">Your profile is incomplete, <%= link_to("complete it now!", edit_user_path(@current_user))%> before you can pick!</p>
+	<% end %>
+	<div>
+		<label>Name:</label>
+		<span><%= @current_user.name %></span> 
+	</div>
+	<div>
+		<label>Email:</label>
+		<span><%= @current_user.email %></span> 
+	</div>
+	<div>
+		<label>Phone number:</label>
+		<span><%= @current_user.phone_number %></span> 
+	</div>
+	<%= link_to "Edit my Profile", edit_user_path(@current_user) %>
+</div>
+
 <% if @current_user.is_admin? %>
 	<div class="admin">
 		<h2>Admin section</h2>
@@ -23,12 +69,3 @@
 		</table>
 	</div>
 <% end %>
-
-<h2>Party information &amp; Rules</h2>
-<%= textilize CONFIG["info"] %>
-
-<h2>Profile Information</h2>
-<% if !@current_user.profile_complete? %>
-	<%= link_to(edit_user_path(@current_user), "Complete it now!")%>
-<% end %>
-

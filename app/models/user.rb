@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   
-  validates_presence_of :username
+  validates_presence_of :username, :first_name
   validates_presence_of :password, :if => :password_required?
   validates_uniqueness_of :username, :case_sensitive => false
   validates_confirmation_of :password, :unless => Proc.new{|user|user.password.blank?}
@@ -22,11 +22,18 @@ class User < ActiveRecord::Base
     return false
   end
   
+  def self.clear_picks!
+    User.all.each do |user|
+      user.update_attribute(:has_picked, false)
+      user.update_attribute(:has_been_picked, false)
+    end
+  end
+  
   ###
   # Attribute Accessors
   
   def name
-    self.first_name + ' ' + self.last_name
+    "#{self.first_name} #{self.last_name}"
   end
   
   def login_token
@@ -75,7 +82,13 @@ class User < ActiveRecord::Base
   end
   
   def profile_complete?
-    self.email && self.phone_number
+    !self.email.blank? && !self.phone_number.blank?
+  end
+  
+  def pick!(picked_user)
+    self.update_attribute(:has_picked, true)
+    picked_user.update_attribute(:has_been_picked, true)
+    Notifications.deliver_pick(self, picked_user)
   end
   
   protected

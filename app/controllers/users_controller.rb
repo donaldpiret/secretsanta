@@ -23,6 +23,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     @user.update_attributes!(params[:user])
+    flash[:notice] = "User updated"
+    redirect_to dashboard_url
   rescue ActiveRecord::RecordInvalid
     render :action => 'edit'
   end
@@ -38,16 +40,55 @@ class UsersController < ApplicationController
     end
   end
   
+  def pick
+    raise Exception, "You have already picked" and return false if @current_user.has_picked?
+    User.transaction do 
+      possible_picks = User.find(:all, :conditions => ["users.id <> ? AND users.has_been_picked = ?", @current_user.id, false])
+      if possible_picks.empty?
+        if User.all.size == 1
+          flash[:notice] = "You can only pick yourself..."
+        else
+          flash[:notice] = "There is only yourself left to pick.! Bad luck, the application has been reset and everybody has been notified. Please try picking again."
+          bad_pick(@current_user)
+        end
+        redirect_to dashboard_url
+      else
+        # Possible to pick
+        selected_pick = possible_picks[rand(possible_picks.size)]
+        @current_user.pick!(selected_pick)
+        flash[:notice] = "Good pick, lucky you!! An email has been sent to your email address with a reminder of your pick."
+        flash[:pick_name] = selected_pick.name
+        # If this was the last pick
+        if User.find(:all, :conditions => {:has_picked => false}).empty?
+          Notifications.deliver_goodround(@current_user)
+        end
+        redirect_to dashboard_url
+      end
+    end
+  end
+  
+protected
+
+  ###
+  # Special Methods
+
+  def bad_pick(last_user)
+    Notifications.deliver_badround(last_user)
+    User.clear_picks!
+  end
+  
 private
 
   ###
   # Callbacks
   
   def can_only_edit_self
-    unless @current_user.is_admin? || @current_user.id == params[:id]
+    unless @current_user.is_admin? || @current_user.id == params[:id].to_i
       flash[:notice] = "You are not allowed to edit somebody else"
       redirect_to dashboard_url and return false
     end
   end
+  
+
   
 end
